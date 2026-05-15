@@ -130,10 +130,9 @@
   // ── Mode helpers ─────────────────────────────────────────────────────────────
   function stopCamera() {
     stopHandTracker()
-    if (videoEl) {
-      const tracks = videoEl.srcObject?.getTracks?.() ?? []
-      tracks.forEach(t => t.stop())
-      videoEl = null
+    if (videoEl?.srcObject) {
+      videoEl.srcObject.getTracks().forEach(t => t.stop())
+      videoEl.srcObject = null
     }
   }
 
@@ -142,11 +141,7 @@
       const stream = await navigator.mediaDevices.getUserMedia({ video: true })
       stopCamera()
 
-      videoEl = document.createElement('video')
       videoEl.srcObject = stream
-      videoEl.autoplay = true
-      videoEl.playsInline = true
-      videoEl.muted = true
       await videoEl.play()
 
       showPrompt = false
@@ -225,6 +220,17 @@
 {#if showFsHint}
   <p class="fs-hint" transition:fade={{ duration: 600 }}>press esc to exit fullscreen</p>
 {/if}
+
+<!-- ── Camera video feed ──────────────────────────────────────────────────── -->
+<!-- svelte-ignore a11y-media-has-caption -->
+<video
+  bind:this={videoEl}
+  class="video-feed"
+  class:visible={activeMode === 'camera' && !showPrompt}
+  autoplay
+  playsinline
+  muted
+/>
 
 <!-- ── Canvas mount point ────────────────────────────────────────────────── -->
 <div bind:this={canvasContainer} class="canvas-wrap" />
@@ -390,6 +396,29 @@
     color: #00ffcc;
     border-color: rgba(0, 255, 204, 0.55);
     background: rgba(0, 255, 204, 0.1);
+  }
+
+  /* ── Camera video feed ────────────────────────────────────────────────── */
+  .video-feed {
+    position: fixed;
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%) scaleX(-1);
+    width: clamp(100px, 18vw, 160px);
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border: 1px solid rgba(0, 255, 204, 0.28);
+    border-radius: 3px;
+    box-shadow: 0 0 12px rgba(0, 255, 204, 0.12);
+    z-index: 30;
+    background: #000005;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+  }
+
+  .video-feed.visible {
+    opacity: 1;
   }
 
   /* ── Fullscreen hint ──────────────────────────────────────────────────── */
