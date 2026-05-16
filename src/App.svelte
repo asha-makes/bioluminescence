@@ -180,6 +180,7 @@
     <p class="sub">move your hands to wake the light</p>
     <div class="buttons">
       <button class="btn-primary" on:click={enableCamera}>enable camera</button>
+      <p class="camera-hint">hold your hands up · good lighting helps · up to two hands</p>
       <button class="btn-secondary" on:click={enableMouse}>use mouse instead</button>
     </div>
   </div>
@@ -295,6 +296,15 @@
     flex-direction: column;
     align-items: center;
     gap: clamp(0.7rem, 2vw, 1.2rem);
+  }
+
+  .camera-hint {
+    font-size: clamp(0.62rem, 1.5vw, 0.78rem);
+    letter-spacing: 0.18em;
+    color: rgba(0, 255, 204, 0.32);
+    text-align: center;
+    margin-top: -0.2rem;
+    margin-bottom: 0.2rem;
   }
 
   .btn-primary,
