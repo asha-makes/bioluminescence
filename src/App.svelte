@@ -446,4 +446,19 @@
     white-space: nowrap;
     pointer-events: none;
   }
+
+  /* ── Mobile ───────────────────────────────────────────────────────────── */
+  @media (hover: none) {
+    .fs-btn { display: none; }
+  }
+
+  @media (max-width: 1068px) {
+    .title       { letter-spacing: 0.12em; }
+    .sub         { letter-spacing: 0.12em; }
+    .camera-hint { letter-spacing: 0.08em; }
+  }
+
+  @media (max-width: 400px) {
+    .title { font-size: clamp(1.2rem, 7vw, 1.8rem); }
+  }
 </style>
